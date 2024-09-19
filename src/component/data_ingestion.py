@@ -1,7 +1,9 @@
 import os, sys
-from src.exception import CustomException
 from src.logger import logging
+
+# from src.logger import logging
 import pandas as pd
+from src.exception import CustomException
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
@@ -19,14 +21,14 @@ class DataIngestion:
         logging.info("Data ingestion method initiated")
         try:
             df = pd.read_csv('notebook\data\student.csv')
-            lossing.info("Dataset now read and stored in df")
+            logging.info("Dataset now read and stored in df")
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
 
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
             logging.info("Train test split now being initiated")
-            train_set, test_set = train_test_split(df, test_set=0.2, random_state=30)
+            train_set, test_set = train_test_split(df, test_size=0.2, random_state=30)
 
             train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
             test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
@@ -41,4 +43,6 @@ class DataIngestion:
             raise CustomException(e, sys)
 
 
-    
+if __name__=="__main__":
+    obj = DataIngestion()
+    obj.initiate_data_ingestion()
