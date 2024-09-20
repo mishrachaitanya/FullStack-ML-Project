@@ -9,6 +9,8 @@ from dataclasses import dataclass
 
 from src.component.data_transformation import DataTransformation, DataTransformationConfig
 
+from src.component.model_trainer import ModelTrainerConfig, ModelTrainer
+
 @dataclass
 class DataIngestionConfig:
     train_data_path: str= os.path.join('artifacts',"train.csv")
@@ -22,7 +24,7 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Data ingestion method initiated")
         try:
-            df = pd.read_csv('notebook\data\student.csv')
+            df = pd.read_csv(r'C:\Users\mishr\Desktop\ML Project Full Stack\FullStack-ML-Project\notebook\data\student.csv')
             logging.info("Dataset now read and stored in df")
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
@@ -50,4 +52,7 @@ if __name__=="__main__":
     train_data, test_data = obj.initiate_data_ingestion()
 
     data_transformation = DataTransformation()
-    data_transformation.initiate_data_trans(train_data, test_data)
+    train_array, test_array,_ = data_transformation.initiate_data_trans(train_data, test_data)
+
+    modeltrainer = ModelTrainer()
+    print(modeltrainer.initiate_model_trainer(train_array, test_array))
